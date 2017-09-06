@@ -72,8 +72,11 @@ public class GoogleSignInPresenterImpl implements GoogleSignInPresenter {
             Log.d("tag", "5");
             signInAccount = result.getSignInAccount();
             signInModel.handleSignInResult(signInAccount);
+        } else {
+            signInView.hideProgress();
+            signInView.onResultFailed();
+
         }
-        signInView.hideProgress();
     }
 
     @Subscribe

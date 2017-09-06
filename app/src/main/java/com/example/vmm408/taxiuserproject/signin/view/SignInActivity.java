@@ -76,6 +76,7 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         googleSignInPresenter.onActivityResult(this, requestCode, resultCode, data);
     }
 
