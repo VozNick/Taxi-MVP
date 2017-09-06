@@ -9,7 +9,11 @@ public interface SignInView {
 
     void onResultFailed();
 
-    void navigateToProfileActivity(String userId, String userPhotoUrl, String userFullName);
+    void startActivityForResult();
+
+    String getUserId();
+
+    void navigateToProfileActivity();
 
     void navigateToMapActivity();
 }

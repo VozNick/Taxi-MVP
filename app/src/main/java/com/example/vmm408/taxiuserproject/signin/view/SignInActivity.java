@@ -5,27 +5,38 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.vmm408.taxiuserproject.R;
+import com.example.vmm408.taxiuserproject.eventbus.EventUserFromBase;
 import com.example.vmm408.taxiuserproject.map.MapActivity;
 import com.example.vmm408.taxiuserproject.profile.ProfileActivity;
-import com.example.vmm408.taxiuserproject.signin.presenter.GoogleSignInPresenterImpl;
+import com.example.vmm408.taxiuserproject.signin.google.GoogleSignInPresenterImpl;
+import com.example.vmm408.taxiuserproject.signin.presenter.SignInPresenterImpl;
 import com.example.vmm408.taxiuserproject.signin.model.SignInModelImpl;
-import com.example.vmm408.taxiuserproject.signin.presenter.GoogleSignInPresenter;
+import com.example.vmm408.taxiuserproject.signin.presenter.SignInPresenter;
+import com.example.vmm408.taxiuserproject.utils.MyKeys;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SignInActivity extends AppCompatActivity implements SignInView {
     private ProgressDialog progressDialog;
-    private GoogleSignInPresenter googleSignInPresenter;
+    private SignInPresenter signInPresenter;
+    private GoogleApiClient googleApiClient;
+    private GoogleSignInAccount googleSignInAccount;
 
     @Override
     protected void onStart() {
         super.onStart();
-        googleSignInPresenter.onStart();
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -34,10 +45,10 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
         setContentView(R.layout.fragment_google_sign_in);
         ButterKnife.bind(this);
         initProgressDialog();
-        if (googleSignInPresenter == null) {
-            googleSignInPresenter = new GoogleSignInPresenterImpl(this, new SignInModelImpl());
+        if (signInPresenter == null) {
+            signInPresenter = new SignInPresenterImpl(this, new SignInModelImpl());
         }
-        googleSignInPresenter.createGoogleClient(this);
+        googleApiClient = new GoogleSignInPresenterImpl().createGoogleClient(this);
     }
 
     private void initProgressDialog() {
@@ -48,11 +59,8 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
 
     @OnClick(R.id.sign_in_button)
     void signIn() {
-
-        Log.d("tag", "1");
-        googleSignInPresenter.signIn(this);
+        signInPresenter.signIn();
     }
-
 
     @Override
     public void showProgress() {
@@ -75,14 +83,43 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        googleSignInPresenter.onActivityResult(this, requestCode, resultCode, data);
+    public void startActivityForResult() {
+        startActivityForResult(Auth.GoogleSignInApi.getSignInIntent(googleApiClient), MyKeys.SIGN_IN_KEY);
     }
 
     @Override
-    public void navigateToProfileActivity(String userId, String userPhotoUrl, String userFullName) {
-        startActivity(new Intent(this, ProfileActivity.class));
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == MyKeys.SIGN_IN_KEY) {
+            handleSignInResult(Auth.GoogleSignInApi.getSignInResultFromIntent(data));
+        }
+    }
+
+    private void handleSignInResult(GoogleSignInResult result) {
+        if (result.isSuccess()) {
+            googleSignInAccount = result.getSignInAccount();
+            signInPresenter.resultIsSuccess();
+        } else {
+            signInPresenter.resultFailed();
+        }
+    }
+
+    @Override
+    public String getUserId() {
+        return googleSignInAccount.getId();
+    }
+
+    @Subscribe
+    public void getEvent(EventUserFromBase eventUserFromBase) {
+        signInPresenter.getEvent(eventUserFromBase.getUserModel());
+    }
+
+    @Override
+    public void navigateToProfileActivity() {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra("userId", googleSignInAccount.getId());
+        intent.putExtra("userPhotoUrl", googleSignInAccount.getPhotoUrl());
+        intent.putExtra("userFullName", googleSignInAccount.getGivenName() + " " + googleSignInAccount.getFamilyName());
+        startActivity(intent);
     }
 
     @Override
@@ -97,12 +134,12 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
     @Override
     protected void onStop() {
         super.onStop();
-        googleSignInPresenter.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
     protected void onDestroy() {
-        googleSignInPresenter.onDestroy();
+        signInPresenter.onDestroy();
         super.onDestroy();
     }
 }
