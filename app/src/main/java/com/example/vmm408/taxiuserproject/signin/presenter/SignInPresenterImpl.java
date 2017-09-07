@@ -16,7 +16,7 @@ public class SignInPresenterImpl implements SignInPresenter {
         this.signInView = signInView;
         this.signInModel = signInModel;
         this.googleSignIn = googleSignIn;
-        if (signInModel.userSignedInApp() != null) {
+        if (signInModel.userSignedInApp().length() > 0) {
             signInView.navigateToMapActivity();
         }
     }
