@@ -9,17 +9,24 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-public class GoogleSignInApiImpl implements GoogleSignInApi {
+import org.greenrobot.eventbus.EventBus;
+
+public class GoogleSignInImpl implements GoogleSignIn {
     private SignInView signInView;
     private GoogleSignInAccount googleSignInAccount;
-    private GoogleApiClient.OnConnectionFailedListener failedListener;
-//            connectionResult -> signInPresenter.connectionFailedListener();
+    private GoogleApiClient.OnConnectionFailedListener failedListener =
+            connectionResult -> signInView.onConnectionFailed();
 
-    public GoogleSignInApiImpl(SignInView signInView) {
+    public GoogleSignInImpl(SignInView signInView) {
         this.signInView = signInView;
     }
 
     @Override
+    public void signInWithGoogle() {
+        EventBus.getDefault().post(Auth.GoogleSignInApi.getSignInIntent(createGoogleApiClient()));
+    }
+
+//    @Override
     public GoogleApiClient createGoogleApiClient() {
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

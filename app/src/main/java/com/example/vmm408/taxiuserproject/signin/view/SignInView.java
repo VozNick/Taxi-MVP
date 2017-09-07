@@ -8,8 +8,6 @@ public interface SignInView {
 
     void onResultFailed();
 
-    void signInWithGoogle();
-
     void navigateToProfileActivity();
 
     void navigateToMapActivity();

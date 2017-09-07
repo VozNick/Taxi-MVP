@@ -1,10 +1,11 @@
 package com.example.vmm408.taxiuserproject.signin.google;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.common.api.GoogleApiClient;
 
-public interface GoogleSignInApi {
-    GoogleApiClient createGoogleApiClient();
+public interface GoogleSignIn {
+//    GoogleApiClient createGoogleApiClient();
+
+    void signInWithGoogle();
 
     void setUserData(GoogleSignInAccount userData);
 

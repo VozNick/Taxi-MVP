@@ -10,8 +10,7 @@ import android.widget.Toast;
 import com.example.vmm408.taxiuserproject.R;
 import com.example.vmm408.taxiuserproject.map.MapActivity;
 import com.example.vmm408.taxiuserproject.profile.view.ProfileActivity;
-import com.example.vmm408.taxiuserproject.signin.google.GoogleSignInApi;
-import com.example.vmm408.taxiuserproject.signin.google.GoogleSignInApiImpl;
+import com.example.vmm408.taxiuserproject.signin.google.GoogleSignInImpl;
 import com.example.vmm408.taxiuserproject.signin.presenter.SignInPresenterImpl;
 import com.example.vmm408.taxiuserproject.signin.model.SignInModelImpl;
 import com.example.vmm408.taxiuserproject.signin.presenter.SignInPresenter;
@@ -19,14 +18,22 @@ import com.example.vmm408.taxiuserproject.utils.MyKeys;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SignInActivity extends AppCompatActivity implements SignInView {
     private SignInPresenter signInPresenter;
     private ProgressDialog progressDialog;
-    private GoogleSignInApi googleSignInApi;
+//    private GoogleSignIn googleSignIn;
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,9 +41,9 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
         setContentView(R.layout.fragment_google_sign_in);
         ButterKnife.bind(this);
         createDialog();
-        googleSignInApi = new GoogleSignInApiImpl(this);
+//        googleSignIn = new GoogleSignInImpl(this);
         if (signInPresenter == null) {
-            signInPresenter = new SignInPresenterImpl(this, new SignInModelImpl(), googleSignInApi);
+            signInPresenter = new SignInPresenterImpl(this, new SignInModelImpl(), new GoogleSignInImpl(this));
         }
     }
 
@@ -60,11 +67,9 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
         }
     }
 
-    @Override
-    public void signInWithGoogle() {
-        startActivityForResult(
-                Auth.GoogleSignInApi.getSignInIntent(googleSignInApi.createGoogleApiClient()),
-                MyKeys.SIGN_IN_KEY);
+    @Subscribe
+    public void getEvent(Intent intent) {
+        startActivityForResult(intent, MyKeys.SIGN_IN_KEY);
     }
 
     @Override
@@ -77,7 +82,7 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
 
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
-            googleSignInApi.setUserData(result.getSignInAccount());
+//            googleSignIn.setUserData(result.getSignInAccount());
             signInPresenter.resultIsSuccess(true);
         } else {
             signInPresenter.resultIsSuccess(false);
@@ -107,6 +112,13 @@ public class SignInActivity extends AppCompatActivity implements SignInView {
     protected void makeToast(String string) {
         Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
 
     @Override
     protected void onDestroy() {
