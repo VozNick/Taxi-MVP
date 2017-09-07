@@ -1,13 +1,13 @@
 package com.example.vmm408.taxiuserproject.signin.google;
 
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
 public interface GoogleSignIn {
-//    GoogleApiClient createGoogleApiClient();
-
     void signInWithGoogle();
 
-    void setUserData(GoogleSignInAccount userData);
+    boolean signInResultIsSuccess(GoogleSignInResult result);
+
+    void getSignInAccount();
 
     String getUserId();
 

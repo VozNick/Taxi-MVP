@@ -3,6 +3,7 @@ package com.example.vmm408.taxiuserproject.signin.presenter;
 import com.example.vmm408.taxiuserproject.signin.google.GoogleSignIn;
 import com.example.vmm408.taxiuserproject.signin.model.SignInModel;
 import com.example.vmm408.taxiuserproject.signin.view.SignInView;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
 public class SignInPresenterImpl implements SignInPresenter {
     private SignInView signInView;
@@ -32,17 +33,22 @@ public class SignInPresenterImpl implements SignInPresenter {
     }
 
     @Override
-    public void resultIsSuccess(boolean flag) {
-        if (flag) {
-            signInModel.saveUser(
-                    googleSignIn.getUserId(),
-                    googleSignIn.getUserPhotoUrl(),
-                    googleSignIn.getUserFullName());
+    public void handleSignInResult(GoogleSignInResult result) {
+        if (googleSignIn.signInResultIsSuccess(result)) {
+            googleSignIn.getSignInAccount();
+            saveUserProfile();
             signInView.navigateToProfileActivity();
         } else {
             signInView.onResultFailed();
         }
         signInView.showLoading(false);
+    }
+
+    private void saveUserProfile() {
+        signInModel.saveUser(
+                googleSignIn.getUserId(),
+                googleSignIn.getUserPhotoUrl(),
+                googleSignIn.getUserFullName());
     }
 
     @Override

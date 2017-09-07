@@ -1,11 +1,13 @@
 package com.example.vmm408.taxiuserproject.signin.presenter;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+
 public interface SignInPresenter {
     void onClickSignIn();
 
     void connectionFailedListener();
 
-    void resultIsSuccess(boolean flag);
+    void handleSignInResult(GoogleSignInResult result);
 
     void onDestroy();
 }

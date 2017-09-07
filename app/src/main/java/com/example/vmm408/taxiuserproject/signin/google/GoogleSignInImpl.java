@@ -3,44 +3,47 @@ package com.example.vmm408.taxiuserproject.signin.google;
 import android.content.Context;
 
 import com.example.vmm408.taxiuserproject.signin.view.SignInActivity;
-import com.example.vmm408.taxiuserproject.signin.view.SignInView;
+import com.example.vmm408.taxiuserproject.utils.MyKeys;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import org.greenrobot.eventbus.EventBus;
-
 public class GoogleSignInImpl implements GoogleSignIn {
-    private SignInView signInView;
+    private Context context;
+    private GoogleSignInResult googleSignInResult;
     private GoogleSignInAccount googleSignInAccount;
-    private GoogleApiClient.OnConnectionFailedListener failedListener =
-            connectionResult -> signInView.onConnectionFailed();
 
-    public GoogleSignInImpl(SignInView signInView) {
-        this.signInView = signInView;
+    public GoogleSignInImpl(Context context) {
+        this.context = context;
     }
 
     @Override
     public void signInWithGoogle() {
-        EventBus.getDefault().post(Auth.GoogleSignInApi.getSignInIntent(createGoogleApiClient()));
+        ((SignInActivity) context).startActivityForResult(
+                Auth.GoogleSignInApi.getSignInIntent(createGoogleApiClient()), MyKeys.SIGN_IN_KEY);
     }
 
-//    @Override
-    public GoogleApiClient createGoogleApiClient() {
+    private GoogleApiClient createGoogleApiClient() {
         GoogleSignInOptions gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .build();
         return new GoogleApiClient
-                .Builder((Context) signInView)
-                .enableAutoManage((SignInActivity) signInView, failedListener)
+                .Builder(context)
+                .enableAutoManage((SignInActivity) context, (SignInActivity) context)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
     }
 
     @Override
-    public void setUserData(GoogleSignInAccount userData) {
-        googleSignInAccount = userData;
+    public boolean signInResultIsSuccess(GoogleSignInResult result) {
+        return (googleSignInResult = result).isSuccess();
+    }
+
+    @Override
+    public void getSignInAccount() {
+        googleSignInAccount = googleSignInResult.getSignInAccount();
     }
 
     @Override
