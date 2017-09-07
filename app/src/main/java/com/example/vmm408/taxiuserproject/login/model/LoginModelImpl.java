@@ -1,4 +1,4 @@
-package com.example.vmm408.taxiuserproject.signin.model;
+package com.example.vmm408.taxiuserproject.login.model;
 
 import com.example.vmm408.taxiuserproject.App;
 import com.example.vmm408.taxiuserproject.models.UserModel;
@@ -6,7 +6,7 @@ import com.example.vmm408.taxiuserproject.utils.UserSharedUtils;
 
 import static com.example.vmm408.taxiuserproject.models.UserModel.SignedUser;
 
-public class SignInModelImpl implements SignInModel {
+public class LoginModelImpl implements LoginModel {
     @Override
     public String userSignedInApp() {
         return UserSharedUtils.userSignedInApp(App.getAppBaseContext());

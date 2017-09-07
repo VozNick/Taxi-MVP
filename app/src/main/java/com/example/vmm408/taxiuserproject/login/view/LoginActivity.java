@@ -1,4 +1,4 @@
-package com.example.vmm408.taxiuserproject.signin.view;
+package com.example.vmm408.taxiuserproject.login.view;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -11,10 +11,10 @@ import android.widget.Toast;
 import com.example.vmm408.taxiuserproject.R;
 import com.example.vmm408.taxiuserproject.map.MapActivity;
 import com.example.vmm408.taxiuserproject.profile.view.ProfileActivity;
-import com.example.vmm408.taxiuserproject.signin.google.GoogleSignInImpl;
-import com.example.vmm408.taxiuserproject.signin.presenter.SignInPresenterImpl;
-import com.example.vmm408.taxiuserproject.signin.model.SignInModelImpl;
-import com.example.vmm408.taxiuserproject.signin.presenter.SignInPresenter;
+import com.example.vmm408.taxiuserproject.login.google.GoogleAuthService;
+import com.example.vmm408.taxiuserproject.login.presenter.LoginPresenterImpl;
+import com.example.vmm408.taxiuserproject.login.model.LoginModelImpl;
+import com.example.vmm408.taxiuserproject.login.presenter.LoginPresenter;
 import com.example.vmm408.taxiuserproject.utils.MyKeys;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
@@ -23,9 +23,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SignInActivity extends AppCompatActivity
-        implements SignInView, GoogleApiClient.OnConnectionFailedListener {
-    private SignInPresenter signInPresenter;
+public class LoginActivity extends AppCompatActivity
+        implements LoginView, GoogleApiClient.OnConnectionFailedListener {
+    private LoginPresenter loginPresenter;
     private ProgressDialog progressDialog;
 
     @Override
@@ -34,8 +34,8 @@ public class SignInActivity extends AppCompatActivity
         setContentView(R.layout.fragment_google_sign_in);
         ButterKnife.bind(this);
         createDialog();
-        if (signInPresenter == null) {
-            signInPresenter = new SignInPresenterImpl(this, new SignInModelImpl(), new GoogleSignInImpl(this));
+        if (loginPresenter == null) {
+            loginPresenter = new LoginPresenterImpl(this, new LoginModelImpl(), new GoogleAuthService(this));
         }
     }
 
@@ -47,7 +47,7 @@ public class SignInActivity extends AppCompatActivity
 
     @OnClick(R.id.sign_in_button)
     void btnSignIn() {
-        signInPresenter.onClickSignIn();
+        loginPresenter.onClickSignIn();
     }
 
     @Override
@@ -63,22 +63,22 @@ public class SignInActivity extends AppCompatActivity
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == MyKeys.SIGN_IN_KEY) {
-            signInPresenter.handleSignInResult(Auth.GoogleSignInApi.getSignInResultFromIntent(data));
+            loginPresenter.handleSignInResult(Auth.GoogleSignInApi.getSignInResultFromIntent(data));
         }
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        signInPresenter.connectionFailedListener();
+        loginPresenter.connectionFailed();
     }
 
     @Override
-    public void onConnectionFailed() {
+    public void showConnectionErrorMessage() {
         makeToast(getResources().getString(R.string.toast_connection_failed));
     }
 
     @Override
-    public void onResultFailed() {
+    public void showResultErrorMessage() {
         makeToast(getResources().getString(R.string.toast_result_failed));
     }
 
@@ -92,13 +92,13 @@ public class SignInActivity extends AppCompatActivity
         startActivity(new Intent(this, MapActivity.class));
     }
 
-    protected void makeToast(String string) {
+    private void makeToast(String string) {
         Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     protected void onDestroy() {
-        signInPresenter.onDestroy();
+        loginPresenter.onDestroy();
         super.onDestroy();
     }
 }
