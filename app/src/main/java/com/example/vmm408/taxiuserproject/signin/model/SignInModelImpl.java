@@ -3,12 +3,13 @@ package com.example.vmm408.taxiuserproject.signin.model;
 import com.example.vmm408.taxiuserproject.App;
 import com.example.vmm408.taxiuserproject.models.UserModel;
 import com.example.vmm408.taxiuserproject.utils.UserSharedUtils;
+
 import static com.example.vmm408.taxiuserproject.models.UserModel.SignedUser;
 
 public class SignInModelImpl implements SignInModel {
     @Override
     public String userSignedInApp() {
-        return UserSharedUtils.userSignedInApp(new App().appBaseContext);
+        return UserSharedUtils.userSignedInApp(App.getAppBaseContext());
     }
 
     @Override

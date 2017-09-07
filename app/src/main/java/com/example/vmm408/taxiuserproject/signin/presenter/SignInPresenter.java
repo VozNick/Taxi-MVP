@@ -1,11 +1,11 @@
 package com.example.vmm408.taxiuserproject.signin.presenter;
 
 public interface SignInPresenter {
-    void signIn();
+    void onClickSignIn();
 
-    void resultFailed();
+    void connectionFailedListener();
 
-    void resultIsSuccess();
+    void resultIsSuccess(boolean flag);
 
     void onDestroy();
 }

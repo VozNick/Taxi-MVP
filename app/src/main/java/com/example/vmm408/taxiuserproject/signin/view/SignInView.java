@@ -1,23 +1,14 @@
 package com.example.vmm408.taxiuserproject.signin.view;
 
 public interface SignInView {
-    void initProgressDialog();
 
-    void showProgress();
+    void showLoading(boolean flag);
 
-    void hideProgress();
-
-    void createGoogleApiClient();
+    void onConnectionFailed();
 
     void onResultFailed();
 
-    void startActivityForResult();
-
-    String getUserId();
-
-    String getUserPhotoUrl();
-
-    String getUserFullName();
+    void signInWithGoogle();
 
     void navigateToProfileActivity();
 
