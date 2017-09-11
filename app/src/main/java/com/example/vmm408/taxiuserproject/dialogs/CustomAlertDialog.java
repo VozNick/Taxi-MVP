@@ -4,37 +4,36 @@ import android.content.Context;
 import android.support.v7.app.AlertDialog;
 
 import com.example.vmm408.taxiuserproject.R;
+import com.example.vmm408.taxiuserproject.profile.view.ProfileActivity;
 
 public class CustomAlertDialog implements CustomAlertDialogInterface {
     private Context context;
+    private AlertDialog.Builder dialog;
     private Integer position;
 
     public CustomAlertDialog(Context context) {
         this.context = context;
+        dialog = new AlertDialog.Builder(context);
     }
 
-    @Override
+    public void showAvatarMenuDialog() {
+        dialog.setItems(R.array.menu_new_avatar, (ProfileActivity) context).show();
+    }
+
     public Integer showMenuProfileDialog() {
-        dialog().setItems(R.array.menu_profile, (dialogInterface, i) -> position = i).show();
+        dialog.setItems(R.array.menu_profile, (dialogInterface, i) -> position = i).show();
         return position;
     }
 
-    @Override
     public void showNewOrderDialog() {
 
     }
 
-    @Override
     public void showCurrentOrderDialog() {
 
     }
 
-    @Override
     public void showConfirmDialog() {
 
-    }
-
-    private AlertDialog.Builder dialog() {
-        return new AlertDialog.Builder(context);
     }
 }

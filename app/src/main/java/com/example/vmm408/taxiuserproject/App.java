@@ -4,5 +4,15 @@ import android.app.Application;
 import android.content.Context;
 
 public class App extends Application {
-    public Context appBaseContext = getBaseContext();
+    private static Context appBaseContext;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        appBaseContext = this;
+    }
+
+    public static Context getAppBaseContext() {
+        return appBaseContext;
+    }
 }

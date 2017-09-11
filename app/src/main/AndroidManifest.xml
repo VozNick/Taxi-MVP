@@ -17,18 +17,17 @@
         android:supportsRtl="true"
         android:theme="@style/MyMaterialTheme">
 
-        <receiver
-            android:name=".receiver.NotificationClickReceiver"
-            android:enabled="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name=".NotificationAction" />
-            </intent-filter>
-        </receiver>
+        <!--<receiver-->
+            <!--android:name=".receiver.NotificationClickReceiver"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="true">-->
+            <!--<intent-filter>-->
+                <!--<action android:name=".NotificationAction" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
 
         <activity
-            android:name=".signin.view.SignInActivity"
-            android:launchMode="singleInstance"
+            android:name=".login.view.LoginActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,17 +35,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".profile.ProfileActivity"
-            android:launchMode="singleInstance"
-            android:screenOrientation="portrait"></activity>
+            android:name=".profile.view.ProfileActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".map.MapActivity"
-            android:launchMode="singleInstance"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
-        <service
-            android:name=".service.FirebaseService"
-            android:enabled="true" />
+        <!--<service-->
+            <!--android:name=".service.FirebaseService"-->
+            <!--android:enabled="true" />-->
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

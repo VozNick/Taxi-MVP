@@ -15,11 +15,55 @@
       },
       "oauth_client": [
         {
-          "client_id": "232820416343-ii3qqt7h6o6jhkbepmotlom9utn97e5s.apps.googleusercontent.com",
+          "client_id": "232820416343-3iu85cpfsecf4n24k21aaa6g6llt8bo8.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.vmm408.taxiuserproject",
-            "certificate_hash": "27fc4089ea1d06f07301372b438818861862e8a6"
+            "certificate_hash": "5c7c9203e6844fa1bafb337254279be3dc99a763"
+          }
+        },
+        {
+          "client_id": "232820416343-dre2fh7f5bggin8f8f4b9ggb114dto94.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2wGboAZWN5T5sy_1ZY94UKddKF8zr6vE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "232820416343-dre2fh7f5bggin8f8f4b9ggb114dto94.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:232820416343:android:2ff1452f58d99226",
+        "android_client_info": {
+          "package_name": "ua.step.kostyn.taxidriverproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "232820416343-gvk180pn590seg884jpvkogcc6l8h8cp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ua.step.kostyn.taxidriverproject",
+            "certificate_hash": "8c09851d04ba60d67d5c1d311378d5d891b42c07"
           }
         },
         {

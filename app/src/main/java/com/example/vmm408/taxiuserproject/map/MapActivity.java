@@ -13,4 +13,19 @@ public class MapActivity extends AppCompatActivity{
         setContentView(R.layout.fragment_map);
 
     }
+
+
+//    private ValueEventListener getUserFromBase = new DatabaseValueEventListener() {
+//        @Override
+//        public void onDataChange(DataSnapshot dataSnapshot) {
+//            EventBus.getDefault().post(new EventSignInApi(dataSnapshot.getValue(UserModel.class)));
+//        }
+//    };
+//
+//    @Override
+//    public void findUserInDataBase(String userId) {
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference reference = database.getReference(USERS_REF_KEY).child(userId);
+//        reference.addListenerForSingleValueEvent(getUserFromBase);
+//    }
 }

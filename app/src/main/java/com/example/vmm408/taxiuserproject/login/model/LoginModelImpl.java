@@ -2,14 +2,14 @@ package com.example.vmm408.taxiuserproject.login.model;
 
 import com.example.vmm408.taxiuserproject.App;
 import com.example.vmm408.taxiuserproject.models.UserModel;
-import com.example.vmm408.taxiuserproject.utils.UserSharedUtils;
+import com.example.vmm408.taxiuserproject.utils.PreferenceUtils;
 
 import static com.example.vmm408.taxiuserproject.models.UserModel.SignedUser;
 
 public class LoginModelImpl implements LoginModel {
     @Override
-    public String userSignedInApp() {
-        return UserSharedUtils.userSignedInApp(App.getAppBaseContext());
+    public UserModel userSignedInApp() {
+        return PreferenceUtils.getUserProfileFromShared(App.getAppBaseContext());
     }
 
     @Override

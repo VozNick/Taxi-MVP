@@ -29,6 +29,7 @@
     // SignInFragment
     <string name="progress_dialog_msg">Authenticating…</string>
     <string name="toast_connection_failed">connection failed</string>
+    <string name="toast_result_failed">failed to sign in, try again</string>
 
 
     // SaveProfileFragment

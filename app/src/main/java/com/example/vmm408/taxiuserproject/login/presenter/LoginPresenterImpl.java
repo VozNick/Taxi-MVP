@@ -16,7 +16,7 @@ public class LoginPresenterImpl implements LoginPresenter {
         this.loginView = loginView;
         this.loginModel = loginModel;
         this.googleAuthService = googleAuthService;
-        if (loginModel.userSignedInApp().length() > 0) {
+        if (loginModel.userSignedInApp() != null) {
             loginView.navigateToMapActivity();
         }
     }
