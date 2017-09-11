@@ -14,7 +14,9 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import com.example.vmm408.taxiuserproject.profile.presenter.ProfilePresenterImpl
 import com.example.vmm408.taxiuserproject.utils.ImageLoader;
 import com.example.vmm408.taxiuserproject.utils.keys.MyKeys;
 
+import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 
 import butterknife.BindView;
@@ -48,8 +51,8 @@ public class ProfileActivity extends AppCompatActivity
     Spinner spGender;
     @BindView(R.id.text_age)
     TextView tAge;
-    private ImageLoader imageLoader = new ImageLoader(this);
     private ProfilePresenter profilePresenter;
+    private ImageView tempAvatar;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -83,7 +86,8 @@ public class ProfileActivity extends AppCompatActivity
                                   String fullName,
                                   String phone,
                                   String age) {
-        imageLoader.loadImage(avatar, imageUserAvatar);
+        ImageLoader.loadImage(this, avatar, imageUserAvatar);
+        ImageLoader.loadImage(this, avatar, tempAvatar);
         etFullName.setText(fullName);
         etPhone.setText(phone);
         tAge.setText(age);
@@ -107,6 +111,7 @@ public class ProfileActivity extends AppCompatActivity
             startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), key);
         } else if (key == MyKeys.DELETE_PHOTO_KEY) {
             imageUserAvatar.setImageResource(R.drawable.ic_person_black_24dp);
+            tempAvatar.setImageResource(R.drawable.ic_person_black_24dp);
         }
     }
 
@@ -118,8 +123,10 @@ public class ProfileActivity extends AppCompatActivity
         }
         if (requestCode == MyKeys.IMAGE_CAPTURE_KEY) {
             imageUserAvatar.setImageBitmap((Bitmap) data.getExtras().get("data"));
+            tempAvatar.setImageBitmap((Bitmap) data.getExtras().get("data"));
         } else if (requestCode == MyKeys.PICK_PHOTO_KEY) {
-            imageLoader.loadImage(data.getData(), imageUserAvatar);
+            ImageLoader.loadImage(this, data.getData(), imageUserAvatar);
+            ImageLoader.loadImage(this, data.getData(), tempAvatar);
         }
     }
 
@@ -143,7 +150,9 @@ public class ProfileActivity extends AppCompatActivity
 
     @Override
     public String getAvatar() {
-        return null;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        tempAvatar.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
     }
 
     @Override

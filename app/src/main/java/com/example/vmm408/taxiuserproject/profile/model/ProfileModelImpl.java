@@ -11,6 +11,7 @@ import static com.example.vmm408.taxiuserproject.utils.keys.FirebaseDataBaseKeys
 
 public class ProfileModelImpl implements ProfileModel {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private UserModel userModel = getUserFromStatic();
 
     @Override
     public UserModel userSignedInApp() {
@@ -28,23 +29,22 @@ public class ProfileModelImpl implements ProfileModel {
                                    String phone,
                                    String gender,
                                    String age) {
-        UserModel model = getUserFromStatic();
-        model.setAvatarUser(avatar);
-        model.setFullNameUser(fullName);
-        model.setPhoneUser(phone);
-        model.setGenderUser(gender);
-        model.setAgeUser(age);
-        SignedUser.setUserModel(model);
-        saveUserToRemoteDataBase(model.getIdUser());
+        userModel.setAvatarUser(avatar);
+        userModel.setFullNameUser(fullName);
+        userModel.setPhoneUser(phone);
+        userModel.setGenderUser(gender);
+        userModel.setAgeUser(age);
+        saveUserToRemoteDataBase();
         saveUserToShared();
+        SignedUser.setUserModel(userModel);
     }
 
-    private void saveUserToRemoteDataBase(String userId) {
-        DatabaseReference reference = database.getReference(USERS_REF_KEY).child(userId);
-        reference.setValue(getUserFromStatic());
+    private void saveUserToRemoteDataBase() {
+        DatabaseReference databaseReference = database.getReference(USERS_REF_KEY).child(userModel.getIdUser());
+        databaseReference.setValue(getUserFromStatic());
     }
 
     private void saveUserToShared() {
-        PreferenceUtils.saveUserProfileToShared(App.getAppBaseContext(), getUserFromStatic());
+        PreferenceUtils.saveUserProfileToShared(App.getAppBaseContext(), userModel);
     }
 }

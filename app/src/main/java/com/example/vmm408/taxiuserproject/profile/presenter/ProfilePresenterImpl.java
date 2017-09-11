@@ -30,7 +30,6 @@ public class ProfilePresenterImpl implements ProfilePresenter {
 
     @Override
     public void validateAge(int dayOfMonth, int month, int year) {
-        // validate age
         profileView.setAge(dayOfMonth + "." + (month + 1) + "." + year);
     }
 
