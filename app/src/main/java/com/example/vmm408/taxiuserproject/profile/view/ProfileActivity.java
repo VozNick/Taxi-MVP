@@ -15,6 +15,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -23,13 +24,18 @@ import android.widget.Toast;
 
 import com.example.vmm408.taxiuserproject.R;
 import com.example.vmm408.taxiuserproject.dialogs.CustomAlertDialog;
+import com.example.vmm408.taxiuserproject.eventbus.EventTempImageVariable;
 import com.example.vmm408.taxiuserproject.login.view.LoginActivity;
 import com.example.vmm408.taxiuserproject.map.MapActivity;
 import com.example.vmm408.taxiuserproject.profile.model.ProfileModelImpl;
 import com.example.vmm408.taxiuserproject.profile.presenter.ProfilePresenter;
 import com.example.vmm408.taxiuserproject.profile.presenter.ProfilePresenterImpl;
+import com.example.vmm408.taxiuserproject.utils.BitmapUtils;
 import com.example.vmm408.taxiuserproject.utils.ImageLoader;
 import com.example.vmm408.taxiuserproject.utils.keys.MyKeys;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
@@ -53,6 +59,12 @@ public class ProfileActivity extends AppCompatActivity
     TextView tAge;
     private ProfilePresenter profilePresenter;
     private ImageView tempAvatar;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -87,7 +99,7 @@ public class ProfileActivity extends AppCompatActivity
                                   String phone,
                                   String age) {
         ImageLoader.loadImage(this, avatar, imageUserAvatar);
-        ImageLoader.loadImage(this, avatar, tempAvatar);
+//        ImageLoader.loadImage(this, avatar, tempAvatar);
         etFullName.setText(fullName);
         etPhone.setText(phone);
         tAge.setText(age);
@@ -123,11 +135,17 @@ public class ProfileActivity extends AppCompatActivity
         }
         if (requestCode == MyKeys.IMAGE_CAPTURE_KEY) {
             imageUserAvatar.setImageBitmap((Bitmap) data.getExtras().get("data"));
-            tempAvatar.setImageBitmap((Bitmap) data.getExtras().get("data"));
+//            tempAvatar.setImageBitmap((Bitmap) data.getExtras().get("data"));
         } else if (requestCode == MyKeys.PICK_PHOTO_KEY) {
             ImageLoader.loadImage(this, data.getData(), imageUserAvatar);
-            ImageLoader.loadImage(this, data.getData(), tempAvatar);
+//            ImageLoader.loadImage(this, data.getData(), tempAvatar);
         }
+    }
+
+    @Subscribe
+    public void getEvent(EventTempImageVariable variable) {
+        Log.d("tag", "getEvent: " + variable.getBitmap());
+        tempAvatar.setImageBitmap(variable.getBitmap());
     }
 
     @OnClick(R.id.text_age)
@@ -150,9 +168,7 @@ public class ProfileActivity extends AppCompatActivity
 
     @Override
     public String getAvatar() {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        tempAvatar.getDrawingCache().compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        return Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
+        return BitmapUtils.getFileToString(tempAvatar);
     }
 
     @Override
@@ -188,6 +204,7 @@ public class ProfileActivity extends AppCompatActivity
     @Override
     public void navigateToMapActivity() {
         startActivity(new Intent(this, MapActivity.class));
+        finish();
     }
 
     @Override
@@ -203,10 +220,17 @@ public class ProfileActivity extends AppCompatActivity
     @Override
     public void navigateToSignInActivity() {
         startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 
     public void makeToast(String string) {
         Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

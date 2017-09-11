@@ -85,11 +85,13 @@ public class LoginActivity extends AppCompatActivity
     @Override
     public void navigateToProfileActivity() {
         startActivity(new Intent(this, ProfileActivity.class));
+        finish();
     }
 
     @Override
     public void navigateToMapActivity() {
         startActivity(new Intent(this, MapActivity.class));
+        finish();
     }
 
     private void makeToast(String string) {
