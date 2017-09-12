@@ -3,6 +3,7 @@ package com.example.vmm408.taxiuserproject.profile.presenter;
 import com.example.vmm408.taxiuserproject.models.UserModel;
 import com.example.vmm408.taxiuserproject.profile.model.ProfileModel;
 import com.example.vmm408.taxiuserproject.profile.view.ProfileView;
+import com.example.vmm408.taxiuserproject.utils.keys.MyKeys;
 
 public class ProfilePresenterImpl implements ProfilePresenter {
     private ProfileView profileView;
@@ -15,8 +16,8 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     }
 
     private void showUserData() {
-        UserModel model = profileModel.getUserFromStatic();
-        profileView.fillDataToWidgets(
+        UserModel model = profileModel.getUserProfile();
+        profileView.showDataInWidgets(
                 model.getAvatarUser(),
                 model.getFullNameUser(),
                 model.getPhoneUser(),
@@ -24,13 +25,29 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     }
 
     @Override
-    public void onClickAvatar(int key) {
-        profileView.setAvatar(key);
+    public void onClickAvatar() {
+        profileView.showAvatarMenuDialog();
     }
 
     @Override
-    public void validateAge(int dayOfMonth, int month, int year) {
-        profileView.setAge(dayOfMonth + "." + (month + 1) + "." + year);
+    public void onSelectedAvatarMenu(int key) {
+        if (key == MyKeys.IMAGE_CAPTURE_KEY) {
+            profileView.showAvatarFromCamera(key);
+        } else if (key == MyKeys.PICK_PHOTO_KEY) {
+            profileView.showAvatarFromGallery(key);
+        } else if (key == MyKeys.DELETE_PHOTO_KEY) {
+            profileView.showDefaultAvatar();
+        }
+    }
+
+    @Override
+    public void onClickAgeWidget() {
+        profileView.showDatePickerDialog();
+    }
+
+    @Override
+    public void onSelectedDate(int year, int month, int dayOfMonth) {
+        profileView.showAge(dayOfMonth + "." + (month + 1) + "." + year);
     }
 
     @Override
@@ -43,7 +60,7 @@ public class ProfilePresenterImpl implements ProfilePresenter {
             profileView.showWrongPhoneError();
             return;
         }
-        profileModel.saveUserToDataBase(
+        profileModel.saveUserProfile(
                 profileView.getAvatar(),
                 profileView.getFullName(),
                 profileView.getPhone(),
@@ -51,15 +68,14 @@ public class ProfilePresenterImpl implements ProfilePresenter {
                 profileView.getAge()
         );
         profileView.navigateToMapActivity();
-
     }
 
     @Override
     public void onClickCancel() {
-        if (profileModel.userSignedInApp() == null) {
-            profileView.navigateToSignInActivity();
-        } else {
+        if (profileModel.userSignedInApp()) {
             profileView.navigateToMapActivity();
+        } else {
+            profileView.navigateToSignInActivity();
         }
     }
 

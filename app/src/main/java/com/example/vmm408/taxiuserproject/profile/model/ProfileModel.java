@@ -3,9 +3,9 @@ package com.example.vmm408.taxiuserproject.profile.model;
 import com.example.vmm408.taxiuserproject.models.UserModel;
 
 public interface ProfileModel {
-    UserModel userSignedInApp();
+    boolean userSignedInApp();
 
-    UserModel getUserFromStatic();
+    UserModel getUserProfile();
 
-    void saveUserToDataBase(String avatar, String fullName, String phone, String gender, String age);
+    void saveUserProfile(String avatar, String fullName, String phone, String gender, String age);
 }

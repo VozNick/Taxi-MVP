@@ -2,7 +2,6 @@ package com.example.vmm408.taxiuserproject.profile.view;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -14,17 +13,12 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
-import android.util.Log;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vmm408.taxiuserproject.R;
-import com.example.vmm408.taxiuserproject.dialogs.CustomAlertDialog;
-import com.example.vmm408.taxiuserproject.eventbus.EventTempImageVariable;
 import com.example.vmm408.taxiuserproject.login.view.LoginActivity;
 import com.example.vmm408.taxiuserproject.map.MapActivity;
 import com.example.vmm408.taxiuserproject.profile.model.ProfileModelImpl;
@@ -34,19 +28,17 @@ import com.example.vmm408.taxiuserproject.utils.BitmapUtils;
 import com.example.vmm408.taxiuserproject.utils.ImageLoader;
 import com.example.vmm408.taxiuserproject.utils.keys.MyKeys;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import id.zelory.compressor.Compressor;
 
 public class ProfileActivity extends AppCompatActivity
-        implements ProfileView, AlertDialog.OnClickListener {
+        implements ProfileView {
     @BindView(R.id.image_user_avatar)
     CircleImageView imageUserAvatar;
     @BindView(R.id.edit_text_full_name)
@@ -58,13 +50,13 @@ public class ProfileActivity extends AppCompatActivity
     @BindView(R.id.text_age)
     TextView tAge;
     private ProfilePresenter profilePresenter;
-    private ImageView tempAvatar;
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
+    private AlertDialog alertDialog;
+    private AlertDialog.OnClickListener onClickAvatarMenu =
+            (dialogInterface, i) -> profilePresenter.onSelectedAvatarMenu(i);
+    private DatePickerDialog datePickerDialog;
+    private DatePickerDialog.OnDateSetListener onClickAgeWidget =
+            (datePicker, i, i1, i2) -> profilePresenter.onSelectedDate(i, i1, i2);
+    private String tempAvatarString;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
@@ -94,37 +86,48 @@ public class ProfileActivity extends AppCompatActivity
     }
 
     @Override
-    public void fillDataToWidgets(String avatar,
+    public void showDataInWidgets(String avatar,
                                   String fullName,
                                   String phone,
                                   String age) {
-        ImageLoader.loadImage(this, avatar, imageUserAvatar);
-//        ImageLoader.loadImage(this, avatar, tempAvatar);
+        if (avatar != null) {
+            imageUserAvatar.setImageBitmap(BitmapUtils.getStringToBitmap(avatar));
+        }
         etFullName.setText(fullName);
         etPhone.setText(phone);
         tAge.setText(age);
     }
 
     @OnClick(R.id.image_user_avatar)
-    public void avatarUser() {
-        new CustomAlertDialog(this).showAvatarMenuDialog();
+    public void onClickAvatar() {
+        alertDialog = createDialog();
+        profilePresenter.onClickAvatar();
+    }
+
+    private AlertDialog createDialog() {
+        return new AlertDialog.Builder(this)
+                .setItems(R.array.menu_new_avatar, onClickAvatarMenu)
+                .create();
     }
 
     @Override
-    public void onClick(DialogInterface dialogInterface, int i) {
-        profilePresenter.onClickAvatar(i);
+    public void showAvatarMenuDialog() {
+        alertDialog.show();
     }
 
     @Override
-    public void setAvatar(int key) {
-        if (key == MyKeys.IMAGE_CAPTURE_KEY) {
-            startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null), key);
-        } else if (key == MyKeys.PICK_PHOTO_KEY) {
-            startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), key);
-        } else if (key == MyKeys.DELETE_PHOTO_KEY) {
-            imageUserAvatar.setImageResource(R.drawable.ic_person_black_24dp);
-            tempAvatar.setImageResource(R.drawable.ic_person_black_24dp);
-        }
+    public void showAvatarFromCamera(int key) {
+        startActivityForResult(new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null), key);
+    }
+
+    @Override
+    public void showAvatarFromGallery(int key) {
+        startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI), key);
+    }
+
+    @Override
+    public void showDefaultAvatar() {
+        imageUserAvatar.setImageResource(R.drawable.ic_person_black_24dp);
     }
 
     @Override
@@ -135,40 +138,44 @@ public class ProfileActivity extends AppCompatActivity
         }
         if (requestCode == MyKeys.IMAGE_CAPTURE_KEY) {
             imageUserAvatar.setImageBitmap((Bitmap) data.getExtras().get("data"));
-//            tempAvatar.setImageBitmap((Bitmap) data.getExtras().get("data"));
+            tempAvatarString = BitmapUtils.getFileToString((Bitmap) data.getExtras().get("data"));
         } else if (requestCode == MyKeys.PICK_PHOTO_KEY) {
             ImageLoader.loadImage(this, data.getData(), imageUserAvatar);
-//            ImageLoader.loadImage(this, data.getData(), tempAvatar);
+            File file = new File(ImageLoader.getPathFromUri(this, data.getData()));
+            Bitmap bitmap = new Compressor(this).compressToBitmap(file);
+            tempAvatarString = BitmapUtils.getFileToString(bitmap);
         }
     }
 
-    @Subscribe
-    public void getEvent(EventTempImageVariable variable) {
-        Log.d("tag", "getEvent: " + variable.getBitmap());
-        tempAvatar.setImageBitmap(variable.getBitmap());
+    @OnClick(R.id.text_age)
+    void onClickAgeWidget() {
+        datePickerDialog = getWindowDateDialog();
+        profilePresenter.onClickAgeWidget();
     }
 
-    @OnClick(R.id.text_age)
-    void initAgeWidget() {
+    private DatePickerDialog getWindowDateDialog() {
         Calendar calendar = Calendar.getInstance();
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+        return new DatePickerDialog(this,
                 android.R.style.Theme_DeviceDefault_Dialog_MinWidth,
-                ((view1, year, month, dayOfMonth) -> profilePresenter.validateAge(dayOfMonth, (month + 1), year)),
+                onClickAgeWidget,
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
-        datePickerDialog.getWindow();
+    }
+
+    @Override
+    public void showDatePickerDialog() {
         datePickerDialog.show();
     }
 
     @Override
-    public void setAge(String dateOfBirth) {
+    public void showAge(String dateOfBirth) {
         tAge.setText(dateOfBirth);
     }
 
     @Override
     public String getAvatar() {
-        return BitmapUtils.getFileToString(tempAvatar);
+        return tempAvatarString;
     }
 
     @Override
@@ -225,12 +232,6 @@ public class ProfileActivity extends AppCompatActivity
 
     public void makeToast(String string) {
         Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
     }
 
     @Override

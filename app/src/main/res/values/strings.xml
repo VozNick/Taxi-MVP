@@ -44,7 +44,7 @@
     // item_menu_new_avatar
     <array name="menu_new_avatar">
         <item>Camera</item>
-        <item>File</item>
+        <item>Gallery</item>
         <item>Delete</item>
     </array>
 

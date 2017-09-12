@@ -13,10 +13,9 @@ public class LoginModelImpl implements LoginModel {
     }
 
     @Override
-    public void saveUser(String userId, String userPhotoUrl, String userFullName) {
+    public void saveUser(String userId, String userFullName) {
         UserModel model = new UserModel();
         model.setIdUser(userId);
-        model.setAvatarUser(userPhotoUrl);
         model.setFullNameUser(userFullName);
         SignedUser.setUserModel(model);
     }

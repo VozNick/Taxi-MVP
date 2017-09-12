@@ -47,7 +47,6 @@ public class LoginPresenterImpl implements LoginPresenter {
     private void saveUserProfile() {
         loginModel.saveUser(
                 googleAuthService.getUserId(),
-                googleAuthService.getUserPhotoUrl(),
                 googleAuthService.getUserFullName());
     }
 

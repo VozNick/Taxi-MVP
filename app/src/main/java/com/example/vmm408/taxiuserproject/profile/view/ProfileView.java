@@ -1,11 +1,19 @@
 package com.example.vmm408.taxiuserproject.profile.view;
 
 public interface ProfileView {
-    void fillDataToWidgets(String avatar, String fullName, String phone, String age);
+    void showDataInWidgets(String avatar, String fullName, String phone, String age);
 
-    void setAvatar(int key);
+    void showAvatarMenuDialog();
 
-    void setAge(String dateOfBirth);
+    void showAvatarFromCamera(int key);
+
+    void showAvatarFromGallery(int key);
+
+    void showDefaultAvatar();
+
+    void showDatePickerDialog();
+
+    void showAge(String dateOfBirth);
 
     String getAvatar();
 

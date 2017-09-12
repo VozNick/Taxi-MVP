@@ -51,10 +51,6 @@ public class GoogleAuthService {
         return googleSignInAccount.getId();
     }
 
-    public String getUserPhotoUrl() {
-        return String.valueOf(googleSignInAccount.getPhotoUrl());
-    }
-
     public String getUserFullName() {
         return googleSignInAccount.getGivenName() + " " + googleSignInAccount.getFamilyName();
     }
