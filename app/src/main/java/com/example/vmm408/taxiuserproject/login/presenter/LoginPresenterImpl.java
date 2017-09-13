@@ -47,16 +47,9 @@ public class LoginPresenterImpl implements LoginPresenter, UserExistCallBack {
         if (userExist) {
             loginView.navigateToMapActivity();
         } else {
-            saveUserProfile();
-            loginView.navigateToProfileActivity();
+            loginView.navigateToProfileActivity(googleAuthService.getUserId(), googleAuthService.getUserFullName());
         }
         loginView.showLoading(false);
-    }
-
-    private void saveUserProfile() {
-        loginModel.saveUser(
-                googleAuthService.getUserId(),
-                googleAuthService.getUserFullName());
     }
 
     @Override

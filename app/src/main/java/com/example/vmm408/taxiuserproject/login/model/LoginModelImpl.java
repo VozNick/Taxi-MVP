@@ -10,7 +10,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import static com.example.vmm408.taxiuserproject.models.UserModel.SignedUser;
 import static com.example.vmm408.taxiuserproject.utils.keys.FirebaseDataBaseKeys.USERS_REF_KEY;
 
 public class LoginModelImpl implements LoginModel {
@@ -38,14 +37,6 @@ public class LoginModelImpl implements LoginModel {
         this.userExistCallBack = userExistCallBack;
         DatabaseReference reference = database.getReference(USERS_REF_KEY).child(userId);
         reference.addListenerForSingleValueEvent(getUserFromBase);
-    }
-
-    @Override
-    public void saveUser(String userId, String userFullName) {
-        UserModel model = new UserModel();
-        model.setIdUser(userId);
-        model.setFullNameUser(userFullName);
-        SignedUser.setUserModel(model);
     }
 
     private void saveUserToShared(UserModel userModel) {

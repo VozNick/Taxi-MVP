@@ -7,7 +7,7 @@ public interface LoginView {
 
     void showResultErrorMessage();
 
-    void navigateToProfileActivity();
+    void navigateToProfileActivity(String userId, String userFullName);
 
     void navigateToMapActivity();
 }

@@ -6,6 +6,4 @@ public interface LoginModel {
     boolean userSignedInApp();
 
     void checkUserExist(UserExistCallBack userExistCallBack, String userId);
-
-    void saveUser(String userId, String userFullName);
 }

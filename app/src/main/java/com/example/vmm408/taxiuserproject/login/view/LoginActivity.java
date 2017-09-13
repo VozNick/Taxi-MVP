@@ -23,6 +23,9 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.example.vmm408.taxiuserproject.utils.keys.MyKeys.FULL_NAME_KEY;
+import static com.example.vmm408.taxiuserproject.utils.keys.MyKeys.USER_ID_KEY;
+
 public class LoginActivity extends AppCompatActivity
         implements LoginView, GoogleApiClient.OnConnectionFailedListener {
     private LoginPresenter loginPresenter;
@@ -83,8 +86,11 @@ public class LoginActivity extends AppCompatActivity
     }
 
     @Override
-    public void navigateToProfileActivity() {
-        startActivity(new Intent(this, ProfileActivity.class));
+    public void navigateToProfileActivity(String userId, String userFullName) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        intent.putExtra(USER_ID_KEY, userId);
+        intent.putExtra(FULL_NAME_KEY, userFullName);
+        startActivity(intent);
         finish();
     }
 
