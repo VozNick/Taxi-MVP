@@ -1,6 +1,8 @@
 package com.example.vmm408.taxiuserproject.profile.view;
 
 public interface ProfileView {
+    void showDataCreateProfile();
+
     void showDataInWidgets(String avatar, String fullName, String phone, String age);
 
     void showAvatarMenuDialog();
@@ -14,6 +16,8 @@ public interface ProfileView {
     void showDatePickerDialog();
 
     void showAge(String dateOfBirth);
+
+    String getUserId();
 
     String getAvatar();
 

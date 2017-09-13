@@ -122,27 +122,27 @@ public class UserModel {
                 '}';
     }
 
-    public static class SignedUser {
-        private static UserModel userModel;
-
-        public static void setUserModel(UserModel userModel) {
-            SignedUser.userModel = userModel;
-        }
-
-        public static UserModel getUserModel() {
-            return userModel;
-        }
-    }
-
-    public static class OrderAcceptedDriver {
-        private static UserModel userModel;
-
-        public static void setUserModel(UserModel userModel) {
-            OrderAcceptedDriver.userModel = userModel;
-        }
-
-        public static UserModel getUserModel() {
-            return userModel;
-        }
-    }
+//    public static class SignedUser {
+//        private static UserModel userModel;
+//
+//        public static void setUserModel(UserModel userModel) {
+//            SignedUser.userModel = userModel;
+//        }
+//
+//        public static UserModel getUserModel() {
+//            return userModel;
+//        }
+//    }
+//
+//    public static class OrderAcceptedDriver {
+//        private static UserModel userModel;
+//
+//        public static void setUserModel(UserModel userModel) {
+//            OrderAcceptedDriver.userModel = userModel;
+//        }
+//
+//        public static UserModel getUserModel() {
+//            return userModel;
+//        }
+//    }
 }

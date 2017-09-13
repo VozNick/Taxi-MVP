@@ -78,15 +78,15 @@ public class OrderModel {
                 '}';
     }
 
-    public static class CurrentOrder {
-        private static OrderModel orderModel;
-
-        public static void setOrderModel(OrderModel orderModel) {
-            CurrentOrder.orderModel = orderModel;
-        }
-
-        public static OrderModel getOrderModel() {
-            return orderModel;
-        }
-    }
+//    public static class CurrentOrder {
+//        private static OrderModel orderModel;
+//
+//        public static void setOrderModel(OrderModel orderModel) {
+//            CurrentOrder.orderModel = orderModel;
+//        }
+//
+//        public static OrderModel getOrderModel() {
+//            return orderModel;
+//        }
+//    }
 }

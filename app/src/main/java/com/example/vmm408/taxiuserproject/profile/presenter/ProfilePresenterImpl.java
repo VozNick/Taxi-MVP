@@ -8,6 +8,7 @@ import com.example.vmm408.taxiuserproject.utils.keys.MyKeys;
 public class ProfilePresenterImpl implements ProfilePresenter {
     private ProfileView profileView;
     private ProfileModel profileModel;
+    private UserModel userModel;
 
     public ProfilePresenterImpl(ProfileView profileView, ProfileModel profileModel) {
         this.profileView = profileView;
@@ -16,12 +17,17 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     }
 
     private void showUserData() {
-        UserModel model = profileModel.getUserProfile();
-        profileView.showDataInWidgets(
-                model.getAvatarUser(),
-                model.getFullNameUser(),
-                model.getPhoneUser(),
-                model.getAgeUser());
+        userModel = profileModel.getUserProfile();
+        if (userModel == null) {
+            userModel = new UserModel();
+            profileView.showDataCreateProfile();
+        } else {
+            profileView.showDataInWidgets(
+                    userModel.getAvatarUser(),
+                    userModel.getFullNameUser(),
+                    userModel.getPhoneUser(),
+                    userModel.getAgeUser());
+        }
     }
 
     @Override
@@ -60,22 +66,26 @@ public class ProfilePresenterImpl implements ProfilePresenter {
             profileView.showWrongPhoneError();
             return;
         }
-        profileModel.saveUserProfile(
-                profileView.getAvatar(),
-                profileView.getFullName(),
-                profileView.getPhone(),
-                profileView.getGender(),
-                profileView.getAge()
-        );
+        getDataFromWidgets();
+        profileModel.saveUserProfile(userModel);
         profileView.navigateToMapActivity();
+    }
+
+    private void getDataFromWidgets() {
+        userModel.setIdUser(profileView.getUserId());
+        userModel.setAvatarUser(profileView.getAvatar());
+        userModel.setFullNameUser(profileView.getFullName());
+        userModel.setPhoneUser(profileView.getPhone());
+        userModel.setGenderUser(profileView.getGender());
+        userModel.setAgeUser(profileView.getAge());
     }
 
     @Override
     public void onClickCancel() {
-        if (profileModel.userSignedInApp()) {
-            profileView.navigateToMapActivity();
-        } else {
+        if (userModel == null) {
             profileView.navigateToSignInActivity();
+        } else {
+            profileView.navigateToMapActivity();
         }
     }
 

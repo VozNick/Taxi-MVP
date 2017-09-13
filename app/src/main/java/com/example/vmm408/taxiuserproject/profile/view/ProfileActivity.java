@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import com.example.vmm408.taxiuserproject.R;
 import com.example.vmm408.taxiuserproject.login.view.LoginActivity;
-import com.example.vmm408.taxiuserproject.map.MapActivity;
+import com.example.vmm408.taxiuserproject.map.view.MapActivity;
 import com.example.vmm408.taxiuserproject.profile.model.ProfileModelImpl;
 import com.example.vmm408.taxiuserproject.profile.presenter.ProfilePresenter;
 import com.example.vmm408.taxiuserproject.profile.presenter.ProfilePresenterImpl;
@@ -36,6 +36,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
+
+import static com.example.vmm408.taxiuserproject.utils.keys.MyKeys.FULL_NAME_KEY;
+import static com.example.vmm408.taxiuserproject.utils.keys.MyKeys.USER_ID_KEY;
 
 public class ProfileActivity extends AppCompatActivity
         implements ProfileView {
@@ -56,6 +59,7 @@ public class ProfileActivity extends AppCompatActivity
     private DatePickerDialog datePickerDialog;
     private DatePickerDialog.OnDateSetListener onClickAgeWidget =
             (datePicker, i, i1, i2) -> profilePresenter.onSelectedDate(i, i1, i2);
+    private String userId;
     private String tempAvatarString;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -81,8 +85,15 @@ public class ProfileActivity extends AppCompatActivity
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void requestPermissions() {
         ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
                 MyKeys.READ_STORAGE_KEY);
+    }
+
+    @Override
+    public void showDataCreateProfile() {
+        Bundle bundle = getIntent().getExtras();
+        userId = bundle.getString(USER_ID_KEY);
+        etFullName.setText(bundle.getString(FULL_NAME_KEY));
     }
 
     @Override
@@ -90,9 +101,7 @@ public class ProfileActivity extends AppCompatActivity
                                   String fullName,
                                   String phone,
                                   String age) {
-        if (avatar != null) {
-            imageUserAvatar.setImageBitmap(BitmapUtils.getStringToBitmap(avatar));
-        }
+        imageUserAvatar.setImageBitmap(BitmapUtils.getStringToBitmap(avatar));
         etFullName.setText(fullName);
         etPhone.setText(phone);
         tAge.setText(age);
@@ -171,6 +180,11 @@ public class ProfileActivity extends AppCompatActivity
     @Override
     public void showAge(String dateOfBirth) {
         tAge.setText(dateOfBirth);
+    }
+
+    @Override
+    public String getUserId() {
+        return userId;
     }
 
     @Override

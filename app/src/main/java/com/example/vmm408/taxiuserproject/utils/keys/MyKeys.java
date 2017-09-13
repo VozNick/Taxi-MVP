@@ -3,9 +3,9 @@ package com.example.vmm408.taxiuserproject.utils.keys;
 public class MyKeys {
     public static final int SIGN_IN_KEY = 9001;
 
-    public static final String EDIT_MODE_KEY = "editMode";
+//    public static final String EDIT_MODE_KEY = "editMode";
     public static final String USER_ID_KEY = "userId";
-    public static final String PHOTO_KEY = "photo";
+//    public static final String PHOTO_KEY = "photo";
     public static final String FULL_NAME_KEY = "fullName";
 
     public static final int ITEM_PROFILE_KEY = 0;

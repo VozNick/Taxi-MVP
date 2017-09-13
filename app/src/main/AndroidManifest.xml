@@ -38,7 +38,7 @@
             android:name=".profile.view.ProfileActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".map.MapActivity"
+            android:name=".map.view.MapActivity"
             android:screenOrientation="portrait" />
 
         <!--<service-->
