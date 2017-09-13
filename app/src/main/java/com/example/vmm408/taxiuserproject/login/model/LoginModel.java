@@ -1,9 +1,11 @@
 package com.example.vmm408.taxiuserproject.login.model;
 
-import com.example.vmm408.taxiuserproject.models.UserModel;
+import com.example.vmm408.taxiuserproject.login.presenter.UserExistCallBack;
 
 public interface LoginModel {
-    UserModel userSignedInApp();
+    boolean userSignedInApp();
+
+    void checkUserExist(UserExistCallBack userExistCallBack, String userId);
 
     void saveUser(String userId, String userFullName);
 }

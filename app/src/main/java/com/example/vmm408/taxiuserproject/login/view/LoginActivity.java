@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.example.vmm408.taxiuserproject.R;
-import com.example.vmm408.taxiuserproject.map.MapActivity;
+import com.example.vmm408.taxiuserproject.map.view.MapActivity;
 import com.example.vmm408.taxiuserproject.profile.view.ProfileActivity;
 import com.example.vmm408.taxiuserproject.login.google.GoogleAuthService;
 import com.example.vmm408.taxiuserproject.login.presenter.LoginPresenterImpl;

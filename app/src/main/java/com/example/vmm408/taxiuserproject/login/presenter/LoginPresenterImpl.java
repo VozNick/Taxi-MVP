@@ -5,7 +5,7 @@ import com.example.vmm408.taxiuserproject.login.model.LoginModel;
 import com.example.vmm408.taxiuserproject.login.view.LoginView;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
-public class LoginPresenterImpl implements LoginPresenter {
+public class LoginPresenterImpl implements LoginPresenter, UserExistCallBack {
     private LoginView loginView;
     private LoginModel loginModel;
     private GoogleAuthService googleAuthService;
@@ -16,7 +16,7 @@ public class LoginPresenterImpl implements LoginPresenter {
         this.loginView = loginView;
         this.loginModel = loginModel;
         this.googleAuthService = googleAuthService;
-        if (loginModel.userSignedInApp() != null) {
+        if (loginModel.userSignedInApp()) {
             loginView.navigateToMapActivity();
         }
     }
@@ -36,10 +36,19 @@ public class LoginPresenterImpl implements LoginPresenter {
     public void handleSignInResult(GoogleSignInResult result) {
         if (googleAuthService.signInResultIsSuccess(result)) {
             googleAuthService.getSignInAccount();
-            saveUserProfile();
-            loginView.navigateToProfileActivity();
+            loginModel.checkUserExist(this, googleAuthService.getUserId());
         } else {
             loginView.showResultErrorMessage();
+        }
+    }
+
+    @Override
+    public void userExist(boolean userExist) {
+        if (userExist) {
+            loginView.navigateToMapActivity();
+        } else {
+            saveUserProfile();
+            loginView.navigateToProfileActivity();
         }
         loginView.showLoading(false);
     }
