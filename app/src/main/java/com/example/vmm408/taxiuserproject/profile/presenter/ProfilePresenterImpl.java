@@ -1,9 +1,10 @@
 package com.example.vmm408.taxiuserproject.profile.presenter;
 
+import com.example.vmm408.taxiuserproject.constants.MyKeys;
 import com.example.vmm408.taxiuserproject.models.UserModel;
 import com.example.vmm408.taxiuserproject.profile.model.ProfileModel;
 import com.example.vmm408.taxiuserproject.profile.view.ProfileView;
-import com.example.vmm408.taxiuserproject.utils.keys.MyKeys;
+import com.example.vmm408.taxiuserproject.utils.ValidationUtil;
 
 public class ProfilePresenterImpl implements ProfilePresenter {
     private ProfileView profileView;
@@ -41,11 +42,20 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     @Override
     public void onSelectedAvatarMenu(int key) {
         if (key == MyKeys.IMAGE_CAPTURE_KEY) {
-            profileView.showAvatarFromCamera(key);
+            profileView.getAvatarFromCamera(key);
         } else if (key == MyKeys.PICK_PHOTO_KEY) {
-            profileView.showAvatarFromGallery(key);
+            profileView.getAvatarFromGallery(key);
         } else if (key == MyKeys.DELETE_PHOTO_KEY) {
             profileView.showDefaultAvatar();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode) {
+        if (requestCode == MyKeys.IMAGE_CAPTURE_KEY) {
+            profileView.showAvatarFromCamera();
+        } else if (requestCode == MyKeys.PICK_PHOTO_KEY) {
+            profileView.showAvatarFromGallery();
         }
     }
 
@@ -61,11 +71,11 @@ public class ProfilePresenterImpl implements ProfilePresenter {
 
     @Override
     public void onClickSaveProfile() {
-        if (profileView.getFullName().isEmpty() || profileView.getFullName().trim().length() == 0) {
+        if (ValidationUtil.isNullOrEmpty(profileView.getFullName())) {
             profileView.showEmptyFieldsError();
             return;
         }
-        if (!profileView.getPhone().matches("\\d{10}")) {
+        if (ValidationUtil.isPhoneWrong(profileView.getPhone())) {
             profileView.showWrongPhoneError();
             return;
         }

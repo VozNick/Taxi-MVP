@@ -20,12 +20,12 @@ public class LoginModelImpl implements LoginModel {
     }
 
     @Override
-    public void checkUserExist(String userId, UserProfileCallBack userProfileCallBack) {
+    public void findUserProfile(String userId, UserProfileCallBack userProfileCallBack) {
         DatabaseReference reference = database.getReference(USERS_REF_KEY).child(userId);
         reference.addListenerForSingleValueEvent(new DatabaseValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                userProfileCallBack.getUserProfile(dataSnapshot.getValue(UserModel.class));
+                userProfileCallBack.setUserProfile(dataSnapshot.getValue(UserModel.class));
             }
         });
     }

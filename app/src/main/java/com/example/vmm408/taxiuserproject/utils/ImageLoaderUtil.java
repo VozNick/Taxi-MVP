@@ -11,7 +11,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
-public class ImageLoader {
+public class ImageLoaderUtil {
     public static void loadImage(Context context, Uri uri, ImageView imageView) {
         Picasso.with(context)
                 .load(new File(getPathFromUri(context, uri)))

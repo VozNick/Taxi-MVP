@@ -5,6 +5,8 @@ public interface ProfilePresenter {
 
     void onSelectedAvatarMenu(int key);
 
+    void onActivityResult(int requestCode);
+
     void onClickAgeWidget();
 
     void onSelectedDate(int dayOfMonth, int month, int year);

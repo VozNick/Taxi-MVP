@@ -7,7 +7,7 @@ import com.example.vmm408.taxiuserproject.models.UserModel;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class PreferenceUtils {
+public class PreferenceUtil {
     private static Gson gson = new GsonBuilder().create();
     private static final String SHARED_KEY = "TaxiPerfect";
     private static final String SHARED_USER_PROFILE_KEY = "userProfile";

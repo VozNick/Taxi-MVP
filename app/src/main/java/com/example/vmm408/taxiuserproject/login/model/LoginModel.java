@@ -6,7 +6,7 @@ import com.example.vmm408.taxiuserproject.models.UserModel;
 public interface LoginModel {
     boolean userSignedInApp();
 
-    void checkUserExist(String userId, UserProfileCallBack userProfileCallBack);
+    void findUserProfile(String userId, UserProfileCallBack userProfileCallBack);
 
     void saveUser(UserModel model);
 }

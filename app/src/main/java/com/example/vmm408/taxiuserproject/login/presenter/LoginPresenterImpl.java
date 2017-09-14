@@ -37,13 +37,13 @@ public class LoginPresenterImpl implements LoginPresenter {
     public void handleSignInResult(GoogleSignInResult result) {
         if (googleAuthService.signInResultIsSuccess(result)) {
             googleAuthService.getSignInAccount();
-            loginModel.checkUserExist(googleAuthService.getUserId(), this::getUser);
+            loginModel.findUserProfile(googleAuthService.getUserId(), this::onUserExist);
         } else {
             loginView.showResultErrorMessage();
         }
     }
 
-    private void getUser(UserModel model) {
+    private void onUserExist(UserModel model) {
         if (model == null) {
             loginView.navigateToProfileActivity(googleAuthService.getUserId(), googleAuthService.getUserFullName());
         } else {

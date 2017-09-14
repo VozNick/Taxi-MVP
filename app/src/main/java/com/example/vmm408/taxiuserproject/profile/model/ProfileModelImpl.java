@@ -2,17 +2,17 @@ package com.example.vmm408.taxiuserproject.profile.model;
 
 import com.example.vmm408.taxiuserproject.App;
 import com.example.vmm408.taxiuserproject.models.UserModel;
-import com.example.vmm408.taxiuserproject.utils.PreferenceUtils;
+import com.example.vmm408.taxiuserproject.utils.PreferenceUtil;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import static com.example.vmm408.taxiuserproject.utils.keys.FirebaseDataBaseKeys.USERS_REF_KEY;
+import static com.example.vmm408.taxiuserproject.constants.FirebaseDataBaseKeys.USERS_REF_KEY;
 
 public class ProfileModelImpl implements ProfileModel {
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     @Override
     public UserModel getUserProfile() {
-        return PreferenceUtils.getUserProfileFromShared(App.getAppBaseContext());
+        return PreferenceUtil.getUserProfileFromShared(App.getAppBaseContext());
     }
 
     @Override
@@ -27,6 +27,6 @@ public class ProfileModelImpl implements ProfileModel {
     }
 
     private void saveUserToShared(UserModel userModel) {
-        PreferenceUtils.saveUserProfileToShared(App.getAppBaseContext(), userModel);
+        PreferenceUtil.saveUserProfileToShared(App.getAppBaseContext(), userModel);
     }
 }

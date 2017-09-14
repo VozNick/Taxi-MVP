@@ -11,11 +11,15 @@ public interface ProfileView {
 
     void showAvatarMenuDialog();
 
-    void showAvatarFromCamera(int key);
+    void getAvatarFromCamera(int key);
 
-    void showAvatarFromGallery(int key);
+    void getAvatarFromGallery(int key);
 
     void showDefaultAvatar();
+
+    void showAvatarFromCamera();
+
+    void showAvatarFromGallery();
 
     void showDatePickerDialog();
 
