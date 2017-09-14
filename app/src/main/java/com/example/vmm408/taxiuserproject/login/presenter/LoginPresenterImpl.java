@@ -3,9 +3,10 @@ package com.example.vmm408.taxiuserproject.login.presenter;
 import com.example.vmm408.taxiuserproject.login.google.GoogleAuthService;
 import com.example.vmm408.taxiuserproject.login.model.LoginModel;
 import com.example.vmm408.taxiuserproject.login.view.LoginView;
+import com.example.vmm408.taxiuserproject.models.UserModel;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 
-public class LoginPresenterImpl implements LoginPresenter, UserExistCallBack {
+public class LoginPresenterImpl implements LoginPresenter, UserProfileCallBack {
     private LoginView loginView;
     private LoginModel loginModel;
     private GoogleAuthService googleAuthService;
@@ -43,11 +44,12 @@ public class LoginPresenterImpl implements LoginPresenter, UserExistCallBack {
     }
 
     @Override
-    public void userExist(boolean userExist) {
-        if (userExist) {
-            loginView.navigateToMapActivity();
-        } else {
+    public void getUserProfile(UserModel model) {
+        if (model == null) {
             loginView.navigateToProfileActivity(googleAuthService.getUserId(), googleAuthService.getUserFullName());
+        } else {
+            loginModel.saveUser(model);
+            loginView.navigateToMapActivity();
         }
         loginView.showLoading(false);
     }
