@@ -15,7 +15,7 @@ import com.example.vmm408.taxiuserproject.login.google.GoogleAuthService;
 import com.example.vmm408.taxiuserproject.login.presenter.LoginPresenterImpl;
 import com.example.vmm408.taxiuserproject.login.model.LoginModelImpl;
 import com.example.vmm408.taxiuserproject.login.presenter.LoginPresenter;
-import com.example.vmm408.taxiuserproject.utils.keys.MyKeys;
+import com.example.vmm408.taxiuserproject.constants.MyKeys;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -23,8 +23,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static com.example.vmm408.taxiuserproject.utils.keys.MyKeys.FULL_NAME_KEY;
-import static com.example.vmm408.taxiuserproject.utils.keys.MyKeys.USER_ID_KEY;
+import static com.example.vmm408.taxiuserproject.constants.MyKeys.FULL_NAME_KEY;
+import static com.example.vmm408.taxiuserproject.constants.MyKeys.USER_ID_KEY;
 
 public class LoginActivity extends AppCompatActivity
         implements LoginView, GoogleApiClient.OnConnectionFailedListener {

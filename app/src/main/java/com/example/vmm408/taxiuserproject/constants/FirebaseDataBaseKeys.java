@@ -1,4 +1,4 @@
-package com.example.vmm408.taxiuserproject.utils.keys;
+package com.example.vmm408.taxiuserproject.constants;
 
 public class FirebaseDataBaseKeys {
     public static final String USERS_REF_KEY = "users";
