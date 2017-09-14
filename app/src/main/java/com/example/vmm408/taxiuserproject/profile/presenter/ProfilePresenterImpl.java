@@ -13,6 +13,9 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     public ProfilePresenterImpl(ProfileView profileView, ProfileModel profileModel) {
         this.profileView = profileView;
         this.profileModel = profileModel;
+        if (!profileView.selfPermissionGranted()) {
+            profileView.requestPermissions();
+        }
         showUserData();
     }
 

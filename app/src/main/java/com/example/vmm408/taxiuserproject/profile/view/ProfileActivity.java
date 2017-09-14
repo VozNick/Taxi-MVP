@@ -68,22 +68,21 @@ public class ProfileActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_save_profile);
         ButterKnife.bind(this);
-        if (!selfPermissionGranted()) {
-            requestPermissions();
-        }
         if (profilePresenter == null) {
             profilePresenter = new ProfilePresenterImpl(this, new ProfileModelImpl());
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    private boolean selfPermissionGranted() {
+    @Override
+    public boolean selfPermissionGranted() {
         return ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    private void requestPermissions() {
+    @Override
+    public void requestPermissions() {
         ActivityCompat.requestPermissions(this,
                 new String[] {Manifest.permission.READ_EXTERNAL_STORAGE},
                 MyKeys.READ_STORAGE_KEY);

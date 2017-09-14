@@ -1,6 +1,10 @@
 package com.example.vmm408.taxiuserproject.profile.view;
 
 public interface ProfileView {
+    boolean selfPermissionGranted();
+
+    void requestPermissions();
+
     void showDataCreateProfile();
 
     void showDataInWidgets(String avatar, String fullName, String phone, String age);
