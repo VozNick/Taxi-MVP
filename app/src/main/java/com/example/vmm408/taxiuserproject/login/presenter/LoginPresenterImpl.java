@@ -23,18 +23,18 @@ public class LoginPresenterImpl implements LoginPresenter {
     }
 
     @Override
-    public void onClickSignIn() {
+    public void onSignInClick() {
         loginView.showLoading(true);
         googleAuthService.signInWithGoogle();
     }
 
     @Override
-    public void connectionFailed() {
+    public void onConnectionFailed() {
         loginView.showConnectionErrorMessage();
     }
 
     @Override
-    public void handleSignInResult(GoogleSignInResult result) {
+    public void onSignInResult(GoogleSignInResult result) {
         if (googleAuthService.signInResultIsSuccess(result)) {
             googleAuthService.getSignInAccount();
             loginModel.findUserProfile(googleAuthService.getUserId(), this::onUserExist);

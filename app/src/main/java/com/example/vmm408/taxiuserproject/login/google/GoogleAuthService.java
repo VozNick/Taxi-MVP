@@ -1,8 +1,8 @@
 package com.example.vmm408.taxiuserproject.login.google;
 
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 
-import com.example.vmm408.taxiuserproject.login.view.LoginActivity;
 import com.example.vmm408.taxiuserproject.constants.MyKeys;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -21,7 +21,7 @@ public class GoogleAuthService {
     }
 
     public void signInWithGoogle() {
-        ((LoginActivity) context).startActivityForResult(
+        ((AppCompatActivity) context).startActivityForResult(
                 Auth.GoogleSignInApi.getSignInIntent(createGoogleApiClient()), MyKeys.SIGN_IN_KEY);
     }
 
@@ -32,7 +32,7 @@ public class GoogleAuthService {
                     .build();
             googleApiClient = new GoogleApiClient
                     .Builder(context)
-                    .enableAutoManage((LoginActivity) context, (LoginActivity) context)
+                    .enableAutoManage((AppCompatActivity) context, (GoogleApiClient.OnConnectionFailedListener) context)
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .build();
         }

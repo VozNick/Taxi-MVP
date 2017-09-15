@@ -10,7 +10,7 @@ public class MyKeys {
 
     public static final int ITEM_PROFILE_KEY = 0;
     public static final int ITEM_RATING_KEY = 1;
-    public static final int ITEM_ORDERS_HISTORY_KEY = 2;
+    public static final int ITEM_ARCHIVE_ORDER_KEY = 2;
     public static final int ITEM_SETTINGS_KEY = 3;
 
     public static final int READ_STORAGE_KEY = 111;
