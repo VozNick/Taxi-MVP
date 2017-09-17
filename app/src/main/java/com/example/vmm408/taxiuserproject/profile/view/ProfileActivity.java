@@ -16,23 +16,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.vmm408.taxiuserproject.R;
-import com.example.vmm408.taxiuserproject.login.view.LoginActivity;
 import com.example.vmm408.taxiuserproject.map.view.MapActivity;
+import com.example.vmm408.taxiuserproject.models.UserModel;
 import com.example.vmm408.taxiuserproject.profile.model.ProfileModelImpl;
 import com.example.vmm408.taxiuserproject.profile.presenter.ProfilePresenter;
 import com.example.vmm408.taxiuserproject.profile.presenter.ProfilePresenterImpl;
-import com.example.vmm408.taxiuserproject.utils.AlertDialogUtil;
+import com.example.vmm408.taxiuserproject.utils.DialogUtil;
 import com.example.vmm408.taxiuserproject.utils.BitmapUtil;
 import com.example.vmm408.taxiuserproject.utils.DatePickerDialogUtil;
 import com.example.vmm408.taxiuserproject.utils.ImageLoaderUtil;
 import com.example.vmm408.taxiuserproject.constants.MyKeys;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+
 import static com.example.vmm408.taxiuserproject.constants.MyKeys.FULL_NAME_KEY;
 import static com.example.vmm408.taxiuserproject.constants.MyKeys.USER_ID_KEY;
 
@@ -48,12 +49,14 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     @BindView(R.id.text_age)
     TextView tAge;
     private ProfilePresenter profilePresenter;
-    private AlertDialog.OnClickListener onClickAvatarMenu =
-            (dialogInterface, i) -> profilePresenter.onSelectedAvatarMenu(i);
-    private DatePickerDialog.OnDateSetListener onClickAgeWidget =
-            (datePicker, i, i1, i2) -> profilePresenter.onSelectedDate(i, i1, i2);
+    private AlertDialog.OnClickListener onAvatarMenuClick =
+            (dialogInterface, i) -> profilePresenter.onAvatarMenuSelected(i);
+    private DatePickerDialog.OnDateSetListener onAgeWidgetClick =
+            (datePicker, i, i1, i2) -> profilePresenter.onDateSelected(i, i1, i2);
+    private AlertDialog.OnClickListener onConfirmExitClick =
+            (dialogInterface, i) -> profilePresenter.onConfirmExitClick();
     private String userId;
-    private String tempAvatarString;
+    private String avatarString;
     private Intent activityResultAvatar;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -62,9 +65,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_save_profile);
         ButterKnife.bind(this);
-        if (profilePresenter == null) {
-            profilePresenter = new ProfilePresenterImpl(this, new ProfileModelImpl());
-        }
+        profilePresenter = new ProfilePresenterImpl(this, new ProfileModelImpl());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -83,31 +84,28 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     }
 
     @Override
-    public void showDataCreateProfile() {
+    public void showDataToCreateProfile() {
         Bundle bundle = getIntent().getExtras();
         userId = bundle.getString(USER_ID_KEY);
         etFullName.setText(bundle.getString(FULL_NAME_KEY));
     }
 
     @Override
-    public void showDataInWidgets(String avatar,
-                                  String fullName,
-                                  String phone,
-                                  String age) {
-        imageUserAvatar.setImageBitmap(BitmapUtil.getStringToBitmap(avatar));
-        etFullName.setText(fullName);
-        etPhone.setText(phone);
-        tAge.setText(age);
+    public void showDataToEditProfile(UserModel userModel) {
+        imageUserAvatar.setImageBitmap(BitmapUtil.getStringToBitmap(userModel.getAvatarUser()));
+        etFullName.setText(userModel.getFullNameUser());
+        etPhone.setText(userModel.getPhoneUser());
+        tAge.setText(userModel.getAgeUser());
     }
 
     @OnClick(R.id.image_user_avatar)
-    public void onClickAvatar() {
-        profilePresenter.onClickAvatar();
+    public void onAvatarClick() {
+        profilePresenter.onAvatarClick();
     }
 
     @Override
     public void showAvatarMenuDialog() {
-        AlertDialogUtil.menuAvatar(this, onClickAvatarMenu).show();
+        DialogUtil.menuAvatar(this, onAvatarMenuClick).show();
     }
 
     @Override
@@ -137,24 +135,24 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     @Override
     public void showAvatarFromCamera() {
         imageUserAvatar.setImageBitmap((Bitmap) activityResultAvatar.getExtras().get("data"));
-        tempAvatarString = BitmapUtil.getFileToString((Bitmap) activityResultAvatar.getExtras().get("data"));
+        avatarString = BitmapUtil.getFileToString((Bitmap) activityResultAvatar.getExtras().get("data"));
     }
 
     @Override
     public void showAvatarFromGallery() {
         ImageLoaderUtil.loadImage(this, activityResultAvatar.getData(), imageUserAvatar);
         Bitmap bitmap = BitmapUtil.compressImageFile(this, activityResultAvatar.getData());
-        tempAvatarString = BitmapUtil.getFileToString(bitmap);
+        avatarString = BitmapUtil.getFileToString(bitmap);
     }
 
     @OnClick(R.id.text_age)
-    void onClickAgeWidget() {
-        profilePresenter.onClickAgeWidget();
+    void onAgeWidgetClick() {
+        profilePresenter.onAgeWidgetClick();
     }
 
     @Override
     public void showDatePickerDialog() {
-        DatePickerDialogUtil.userAge(this, onClickAgeWidget).show();
+        DatePickerDialogUtil.userAge(this, onAgeWidgetClick).show();
     }
 
     @Override
@@ -169,7 +167,7 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
 
     @Override
     public String getAvatar() {
-        return tempAvatarString;
+        return avatarString;
     }
 
     @Override
@@ -193,13 +191,13 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     }
 
     @OnClick(R.id.btn_save_profile)
-    void btnSaveProfile() {
-        profilePresenter.onClickSaveProfile();
+    void onSaveProfileClick() {
+        profilePresenter.onSaveProfileClick();
     }
 
     @OnClick(R.id.btn_cancel_profile)
-    void btnCancelProfile() {
-        profilePresenter.onClickCancel();
+    void onCancelProfileClick() {
+        profilePresenter.onCancelProfileClick();
     }
 
     @Override
@@ -219,13 +217,13 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     }
 
     @Override
-    public void navigateToSignInActivity() {
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
+    public void showConfirmExitDialog() {
+        DialogUtil.confirmExitApp(this, onConfirmExitClick).show();
     }
 
-    public void makeToast(String string) {
-        Toast.makeText(this, string, Toast.LENGTH_SHORT).show();
+    @Override
+    public void closeApp() {
+        finish();
     }
 
     @Override

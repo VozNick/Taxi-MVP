@@ -12,6 +12,7 @@
     <string name="btn_back_dialog">BACK</string>
     <string name="btn_confirm_dialog">CONFIRM</string>
 
+    <string name="text_confirm_exit_app">Confirm Exit Taxi Perfect?</string>
     <string name="text_confirm_sign_out">Confirm signOut</string>
     <string name="text_confirm_delete">Confirm delete order</string>
     <string name="text_confirm_delete_order">Order is accepted, delete anyway?</string>
@@ -112,6 +113,6 @@
     <string name="no_data_available">  ---  </string>
 
 
-    <item name="visible" type="id" />
-    <item name="masked" type="id" />
+    <item name="visible" type="id"/>
+    <item name="masked" type="id"/>
 </resources>

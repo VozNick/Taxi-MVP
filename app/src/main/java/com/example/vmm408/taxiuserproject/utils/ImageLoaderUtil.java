@@ -3,6 +3,7 @@ package com.example.vmm408.taxiuserproject.utils;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 
 import com.example.vmm408.taxiuserproject.R;
@@ -26,7 +27,7 @@ public class ImageLoaderUtil {
             if (cursor != null && cursor.moveToFirst())
                 return cursor.getString(cursor.getColumnIndexOrThrow("_data"));
         } catch (NullPointerException e) {
-            ((ProfileActivity) context).makeToast(context.getResources().getString(R.string.toast_load_photo_error));
+            ToasterUtil.makeToast(context, context.getResources().getString(R.string.toast_load_photo_error));
         }
         if (cursor != null)
             cursor.close();

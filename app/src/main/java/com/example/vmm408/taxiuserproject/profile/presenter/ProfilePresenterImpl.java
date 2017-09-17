@@ -23,24 +23,19 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     private void showUserData() {
         userModel = profileModel.getUserProfile();
         if (userModel == null) {
-            userModel = new UserModel();
-            profileView.showDataCreateProfile();
+            profileView.showDataToCreateProfile();
         } else {
-            profileView.showDataInWidgets(
-                    userModel.getAvatarUser(),
-                    userModel.getFullNameUser(),
-                    userModel.getPhoneUser(),
-                    userModel.getAgeUser());
+            profileView.showDataToEditProfile(userModel);
         }
     }
 
     @Override
-    public void onClickAvatar() {
+    public void onAvatarClick() {
         profileView.showAvatarMenuDialog();
     }
 
     @Override
-    public void onSelectedAvatarMenu(int key) {
+    public void onAvatarMenuSelected(int key) {
         if (key == MyKeys.IMAGE_CAPTURE_KEY) {
             profileView.getAvatarFromCamera(key);
         } else if (key == MyKeys.PICK_PHOTO_KEY) {
@@ -60,17 +55,17 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     }
 
     @Override
-    public void onClickAgeWidget() {
+    public void onAgeWidgetClick() {
         profileView.showDatePickerDialog();
     }
 
     @Override
-    public void onSelectedDate(int year, int month, int dayOfMonth) {
+    public void onDateSelected(int year, int month, int dayOfMonth) {
         profileView.showAge(dayOfMonth + "." + (month + 1) + "." + year);
     }
 
     @Override
-    public void onClickSaveProfile() {
+    public void onSaveProfileClick() {
         if (ValidationUtil.isNullOrEmpty(profileView.getFullName())) {
             profileView.showEmptyFieldsError();
             return;
@@ -85,6 +80,7 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     }
 
     private void getDataFromWidgets() {
+        userModel = new UserModel();
         userModel.setIdUser(profileView.getUserId());
         userModel.setAvatarUser(profileView.getAvatar());
         userModel.setFullNameUser(profileView.getFullName());
@@ -94,12 +90,17 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     }
 
     @Override
-    public void onClickCancel() {
+    public void onCancelProfileClick() {
         if (userModel == null) {
-            profileView.navigateToSignInActivity();
+            profileView.showConfirmExitDialog();
         } else {
             profileView.navigateToMapActivity();
         }
+    }
+
+    @Override
+    public void onConfirmExitClick() {
+        profileView.closeApp();
     }
 
     @Override

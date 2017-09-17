@@ -1,19 +1,21 @@
 package com.example.vmm408.taxiuserproject.profile.presenter;
 
 public interface ProfilePresenter {
-    void onClickAvatar();
+    void onAvatarClick();
 
-    void onSelectedAvatarMenu(int key);
+    void onAvatarMenuSelected(int key);
 
     void onActivityResult(int requestCode);
 
-    void onClickAgeWidget();
+    void onAgeWidgetClick();
 
-    void onSelectedDate(int dayOfMonth, int month, int year);
+    void onDateSelected(int dayOfMonth, int month, int year);
 
-    void onClickSaveProfile();
+    void onSaveProfileClick();
 
-    void onClickCancel();
+    void onCancelProfileClick();
+
+    void onConfirmExitClick();
 
     void onDestroy();
 }

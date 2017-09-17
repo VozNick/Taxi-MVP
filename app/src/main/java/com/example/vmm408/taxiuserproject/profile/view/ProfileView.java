@@ -1,13 +1,15 @@
 package com.example.vmm408.taxiuserproject.profile.view;
 
+import com.example.vmm408.taxiuserproject.models.UserModel;
+
 public interface ProfileView {
     boolean selfPermissionGranted();
 
     void requestPermissions();
 
-    void showDataCreateProfile();
+    void showDataToCreateProfile();
 
-    void showDataInWidgets(String avatar, String fullName, String phone, String age);
+    void showDataToEditProfile(UserModel userModel);
 
     void showAvatarMenuDialog();
 
@@ -43,5 +45,7 @@ public interface ProfileView {
 
     void showWrongPhoneError();
 
-    void navigateToSignInActivity();
+    void showConfirmExitDialog();
+
+    void closeApp();
 }
