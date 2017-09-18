@@ -29,6 +29,7 @@ import com.example.vmm408.taxiuserproject.utils.DatePickerDialogUtil;
 import com.example.vmm408.taxiuserproject.utils.ImageLoaderUtil;
 import com.example.vmm408.taxiuserproject.constants.MyKeys;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -48,6 +49,10 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     Spinner spGender;
     @BindView(R.id.text_age)
     TextView tAge;
+    @BindString(R.string.text_error_empty_fields)
+    String textErrorEmptyFields;
+    @BindString(R.string.text_error_phone_format)
+    String textErrorPhoneFormat;
     private ProfilePresenter profilePresenter;
     private AlertDialog.OnClickListener onAvatarMenuClick =
             (dialogInterface, i) -> profilePresenter.onAvatarMenuSelected(i);
@@ -92,6 +97,8 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
 
     @Override
     public void showDataToEditProfile(UserModel userModel) {
+        userId = userModel.getIdUser();
+        avatarString = userModel.getAvatarUser();
         imageUserAvatar.setImageBitmap(BitmapUtil.getStringToBitmap(userModel.getAvatarUser()));
         etFullName.setText(userModel.getFullNameUser());
         etPhone.setText(userModel.getPhoneUser());
@@ -208,12 +215,12 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
 
     @Override
     public void showEmptyFieldsError() {
-        etFullName.setError(getResources().getString(R.string.text_error_empty_fields));
+        etFullName.setError(textErrorEmptyFields);
     }
 
     @Override
     public void showWrongPhoneError() {
-        etPhone.setError(getResources().getString(R.string.text_error_phone_format));
+        etPhone.setError(textErrorPhoneFormat);
     }
 
     @Override
@@ -224,6 +231,11 @@ public class ProfileActivity extends AppCompatActivity implements ProfileView {
     @Override
     public void closeApp() {
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        profilePresenter.onBackPressed();
     }
 
     @Override

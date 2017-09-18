@@ -17,5 +17,7 @@ public interface ProfilePresenter {
 
     void onConfirmExitClick();
 
+    void onBackPressed();
+
     void onDestroy();
 }

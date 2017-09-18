@@ -20,6 +20,7 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -27,6 +28,10 @@ import static com.example.vmm408.taxiuserproject.constants.MyKeys.FULL_NAME_KEY;
 import static com.example.vmm408.taxiuserproject.constants.MyKeys.USER_ID_KEY;
 
 public class LoginActivity extends AppCompatActivity implements LoginView, GoogleApiClient.OnConnectionFailedListener {
+    @BindString(R.string.toast_connection_failed)
+    String toastConnectionFailed;
+    @BindString(R.string.toast_result_failed)
+    String toastResultFailed;
     private LoginPresenter loginPresenter;
 
     @Override
@@ -66,12 +71,12 @@ public class LoginActivity extends AppCompatActivity implements LoginView, Googl
 
     @Override
     public void showConnectionErrorMessage() {
-        ToasterUtil.makeToast(this, getResources().getString(R.string.toast_connection_failed));
+        ToasterUtil.makeToast(this, toastConnectionFailed);
     }
 
     @Override
     public void showResultErrorMessage() {
-        ToasterUtil.makeToast(this, getResources().getString(R.string.toast_result_failed));
+        ToasterUtil.makeToast(this, toastResultFailed);
     }
 
     @Override

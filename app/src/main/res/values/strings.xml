@@ -40,6 +40,7 @@
     // MapFragment
     <string name="search_view_hint">Search here…</string>
     <string name="toast_turn_location">turn on location</string>
+    <string name="toast_no_search_results_found">no results found:</string>
 
 
     // item_menu_new_avatar

@@ -80,7 +80,9 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     }
 
     private void getDataFromWidgets() {
-        userModel = new UserModel();
+        if (userModel == null) {
+            userModel = new UserModel();
+        }
         userModel.setIdUser(profileView.getUserId());
         userModel.setAvatarUser(profileView.getAvatar());
         userModel.setFullNameUser(profileView.getFullName());
@@ -101,6 +103,11 @@ public class ProfilePresenterImpl implements ProfilePresenter {
     @Override
     public void onConfirmExitClick() {
         profileView.closeApp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        onCancelProfileClick();
     }
 
     @Override

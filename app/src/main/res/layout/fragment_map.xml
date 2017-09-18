@@ -48,6 +48,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    app:queryHint="@string/search_view_hint"
                     app:closeIcon="@null"
                     app:searchHintIcon="@null"
                     app:searchIcon="@null" />
